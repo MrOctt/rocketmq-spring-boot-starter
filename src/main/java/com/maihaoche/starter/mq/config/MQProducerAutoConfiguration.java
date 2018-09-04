@@ -3,6 +3,7 @@ package com.maihaoche.starter.mq.config;
 import com.maihaoche.starter.mq.annotation.MQProducer;
 import com.maihaoche.starter.mq.annotation.MQTransactionProducer;
 import com.maihaoche.starter.mq.base.AbstractMQTransactionProducer;
+import java.util.UUID;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -17,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.*;
+import org.springframework.util.StringUtils;
 
 /**
  * Created by yipin on 2017/6/29.
@@ -64,12 +66,18 @@ public class MQProducerAutoConfiguration extends MQBaseAutoConfiguration {
             }
         });
         Environment environment = applicationContext.getEnvironment();
-        beans.entrySet().forEach( transactionProducer -> {
+        beans.forEach((key, value) -> {
             try {
-                AbstractMQTransactionProducer beanObj = AbstractMQTransactionProducer.class.cast(transactionProducer.getValue());
-                MQTransactionProducer anno = beanObj.getClass().getAnnotation(MQTransactionProducer.class);
+                AbstractMQTransactionProducer beanObj = (AbstractMQTransactionProducer) value;
+                MQTransactionProducer anno = beanObj.getClass()
+                        .getAnnotation(MQTransactionProducer.class);
 
-                TransactionMQProducer producer = new TransactionMQProducer(environment.resolvePlaceholders(anno.producerGroup()));
+                TransactionMQProducer producer = new TransactionMQProducer(
+                        environment.resolvePlaceholders(anno.producerGroup()));
+                producer.setInstanceName(
+                        StringUtils.isEmpty(anno.instanceName()) ? UUID.randomUUID().toString()
+                                : anno.instanceName());
+
                 producer.setNamesrvAddr(mqProperties.getNameServerAddress());
                 producer.setExecutorService(executorService);
                 producer.setTransactionListener(beanObj);

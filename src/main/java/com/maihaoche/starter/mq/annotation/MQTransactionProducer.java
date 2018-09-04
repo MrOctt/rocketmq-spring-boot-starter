@@ -18,4 +18,9 @@ public @interface MQTransactionProducer {
      * *重要* 事务的反查是基于同一个producerGroup为维度
      */
     String producerGroup();
+
+    /**
+     * *重要* 实例名
+     */
+    String instanceName() default "";
 }
