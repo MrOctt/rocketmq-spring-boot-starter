@@ -33,7 +33,7 @@
 
     <groupId>com.kaihei</groupId>
     <artifactId>spring-boot-starter-rocketmq</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 
     <scm>
         <url>https://github.com/maihaoche/rocketmq-spring-boot-starter</url>
@@ -52,6 +52,13 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.49</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
@@ -63,10 +70,10 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
+        <!--       <dependency>
+                   <groupId>com.google.code.gson</groupId>
+                   <artifactId>gson</artifactId>
+               </dependency>-->
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
